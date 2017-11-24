@@ -1,0 +1,84 @@
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">{$subtitle}</h1>
+
+    <!-- Start Page Header Right Div -->
+    <div class="right">
+        <div class="btn-group" role="group" aria-label="...">
+        </div>
+    </div>
+    <!-- End Page Header Right Div -->
+
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<div class="container-default">
+    <div class="row" style="margin-bottom: 20px">
+        <form action="{:url('/user/prints/submitorder')}" method="post">
+            <input type="hidden" name="bid" value="{$shop.b_id}">
+            {volist name="files" id="file"}
+            <input type="hidden" name="shopid[{$file.f_id}]" value="{$shop.b_id}">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-title">
+                        <div class="col-md-4">文件名称：<b class="color6">{$file.f_filename}</b></div>
+                        <div class="col-md-4">商家名称：{$shop.b_name}</div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <td>NO</td>
+                                <td>开始页码</td>
+                                <td>结束页码</td>
+                                <td>彩色/黑白</td>
+                                <td>双面/单面</td>
+                                <td>纸张大小</td>
+                                <td>打印份数</td>
+                                <td>特别要求</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <td>1</td>
+                            <td><input typ="text" name="start_page[{$file.f_id}]" value="1"></td>
+                            <td><input typ="text" name="end_page[{$file.f_id}]" value="1"></td>
+                            <td>
+                                <select name="color[{$file.f_id}]">
+                                    <option value="monochrome">黑白</option>
+                                    <option value="colorful">彩色</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="two_sided[{$file.f_id}]">
+                                    <option value="twice">双面</option>
+                                    <option value="single">单面</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="page_size[{$file.f_id}]">
+                                    <option value="a4">a4</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input name="totals[{$file.f_id}]" value="1">
+                            </td>
+                            <td>
+                                <textarea name="extra[{$file.f_id}]"></textarea>
+                            </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+            <div class="col-md-12">
+                <button class="btn btn-danger">下一步</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->

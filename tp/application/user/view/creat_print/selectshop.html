@@ -1,0 +1,114 @@
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">{$subtitle}</h1>
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<div class="container-default" id="dituContent" style="width:100%;height:600px;border:#ccc solid 1px;">
+
+</div>
+
+<!--隐藏表单用来传递 文件的id和商店id-->
+<form id="select-shop-print" action="{:url('/user/creat_print/confirm')}" method="post">
+    <input type="hidden" name="file-ids" value="{$fileids}">
+    <input id="shopid" type="hidden" name="shopid" value="">
+</form>
+
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+<!--BAIDU-API-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PEO88jEpe0U7GlvQz8bqdCqTEtSiY1Cm"></script>
+
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        loc();
+        setMapEvent();//设置地图事件
+    }
+
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(113.631349,34.753488);//定义一个中心点坐标
+        map.centerAndZoom(point,12);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+    
+    function loc() {
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                window.map.panTo(r.point);
+                //alert('您的位置：'+r.point.lng+','+r.point.lat);
+            }
+            else {
+                alert('failed'+this.getStatus());
+            }
+        },{enableHighAccuracy: true})
+    }
+
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+
+
+
+    function openInfo(content, e) {
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        var infoWindow = new BMap.InfoWindow(content, {
+            enableMessage: false//设置允许信息窗发送短息
+        });  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow, point); //开启信息窗口
+    }
+
+    function select_this_shop(shopid) {
+        //console.log(shopid);
+        //给隐藏表单赋值
+        $('#shopid').val(shopid);
+        //提交表单
+        $('#select-shop-print').submit();
+    }
+
+    initMap();//创建和初始化地图
+
+    //标注点数组-通过ajax获取数据
+    //根据地图范围获取数据
+    var bs = map.getBounds();   //获取可视区域
+    var minPoint = bs.getSouthWest();   //可视区域左下角-西南
+    var maxPoint = bs.getNorthEast();   //可视区域右上角-东北
+
+    get_shop_list();
+
+    //地图请求数据函数：
+    function get_shop_list(){
+
+        $.getJSON("/user/creat_print/shoplist", {min_lng: minPoint.lng,min_lat: minPoint.lat,max_lng: maxPoint.lng,max_lat: maxPoint.lat}, function (data) {
+            if (data.status == 2000) {
+                var slists = data.data;
+                for (var i=0; i < slists.length; i++) {
+                    var seller = slists[i];
+                    var shopIcon = new BMap.Icon("http://oss.dayinyun.cn/Public/Home/Images/icon_32.png", new BMap.Size(32, 32));
+                    var marker = new BMap.Marker(new BMap.Point(seller['seller_lng'], seller['seller_lat']), {icon: shopIcon});  // 创建标注
+                    var content = "<h4>" + seller["seller_name"] + "</h4><button class=\"btn btn-danger\" onclick=\"select_this_shop(" + seller["seller_id"] + ")\" >在这打印</a>";
+                    window.map.addOverlay(marker);
+                    marker.addEventListener("click", openInfo.bind(null, content));
+
+                }
+            }
+        });
+    }
+
+
+
+
+</script>

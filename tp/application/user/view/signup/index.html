@@ -1,0 +1,99 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
+    <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
+    <title>Kode - Premium Bootstrap Admin Template</title>
+
+    <!-- ========== Css Files ========== -->
+    <link href="__STATIC__/css/root.css" rel="stylesheet">
+    <style type="text/css">
+        body{background: #F5F5F5;}
+    </style>
+</head>
+<body>
+
+<div class="login-form">
+    <form action="" method="post">
+        <div class="top">
+            <h1>Register</h1>
+            <h4>Join to our community now !</h4>
+        </div>
+        <div class="form-area">
+            <div class="group {$errors.username?'has-error':''}">
+                <input type="text" class="form-control" placeholder="Username" name="username" value="{$Think.post.username}">
+                <i class="fa fa-user"></i>
+                <span class="help-block">{$errors.username?$errors.username:''}</span>
+            </div>
+
+            <div class="group {$errors.passwd?'has-error':''}">
+                <input type="password" class="form-control" placeholder="Password" name="passwd" value="{$Think.post.passwd}">
+                <i class="fa fa-key"></i>
+                <span class="help-block">{$errors.passwd?$errors.passwd:''}</span>
+            </div>
+            <div class="group {$errors.passwd_r?'has-error':''}">
+                <input type="password" class="form-control" placeholder="Password again" name="passwd_r" value="{$Think.post.passwd_r}">
+                <i class="fa fa-key"></i>
+                <span class="help-block">{$errors.passwd_r?$errors.passwd_r:''}</span>
+            </div>
+            <div class="group {$errors.email?'has-error':''}">
+                <input type="text" id="email" class="form-control" placeholder="E-mail" name="email" value="{$Think.post.email}">
+                <i class="fa fa-envelope-o"></i>
+                <span class="help-block">{$errors.email?$errors.email:''}</span>
+
+            </div>
+            <div class="group {$errors.email_code?'has-error':''}">
+                <input type="text" class="form-control" placeholder="email code" name="email_code" value="{$Think.post.email_code}">
+                <i class="fa fa-pencil-square-o"></i>
+                <span class="help-block">{$errors.email_code?$errors.email_code:''}</span>
+            </div>
+            <button type="button" class="btn btn-default btn-block" id="send-email-code" >发送邮件验证码</button>
+            <button type="submit" class="btn btn-default btn-block">REGISTER NOW</button>
+        </div>
+    </form>
+    <div class="footer-links row">
+        <div class="col-xs-6"><a href="/user/signin"><i class="fa fa-sign-in"></i> Login</a></div>
+        <div class="col-xs-6 text-right"><a href="#"><i class="fa fa-lock"></i> Forgot password</a></div>
+    </div>
+</div>
+<script type="text/javascript" src="__STATIC__/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#send-email-code").on("click", function(){
+
+        var that = this;
+        //修改内容
+        $(this).html('发送中...');
+        //发送请求
+        var email = $("#email").val();
+        var url = "{:url('user/signup/sendemailcode')}";
+
+        $.ajax({
+            url:url+'?email='+email,
+            type:'GET',
+            dataType:'json',
+            success:function (data) {
+                alert(data.message);
+                if (data.status == 2000) {
+                var wait = 59;
+                var t = setInterval(function(){
+                    $(that).html('再次发送(<b id="send-wait">' + wait + '</b>秒)');
+                    if (wait <= 0) {
+                        $(that).html('发送邮件验证码');
+                        clearInterval(t);
+                    }
+                    wait--;
+                    }, 1000)
+                }else {
+                    $(that).html('发送邮件验证码');
+                }
+            }
+            }
+        );
+    });
+</script>
+</body>
+</html>

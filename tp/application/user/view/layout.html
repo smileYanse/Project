@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
+    <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
+    <title>Kode - Premium Bootstrap Admin Template</title>
+
+    <!-- ========== Css Files ========== -->
+    <link href="__STATIC__/css/root.css" rel="stylesheet">
+
+</head>
+<body>
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START TOP -->
+<div id="top" class="clearfix">
+
+    <!-- Start App Logo -->
+    <div class="applogo">
+        <a href="index.html" class="logo">云打印用户中心</a>
+    </div>
+    <!-- End App Logo -->
+
+    <!-- Start Top Right -->
+    <ul class="top-right">
+
+        <li class="dropdown link">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle hdbutton"><i class="fa fa-user color6"></i> {$userInfo.username} <span class="caret"></span></a>
+            <ul class="dropdown-menu dropdown-menu-list">
+                <li role="presentation" class="dropdown-header">Profile</li>
+                <li><a href="#"> 我的打印</a></li>
+                <li><a href="#">Files</a></li>
+                <li class="divider"></li>
+                <li><a href="{:url('/user/index/loginout')}"> Logout</a></li>
+            </ul>
+        </li>
+
+        <li class="link">
+            账户余额:{$userInfo.balance?:'0.00'}
+        </li>
+        <li class="link">
+            <a href="#" class="notifications">充值</a>
+        </li>
+    </ul>
+    <!-- End Top Right -->
+
+</div>
+<!-- END TOP -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START SIDEBAR -->
+<div class="sidebar clearfix">
+
+    <ul class="sidebar-panel nav">
+        <li class="sidetitle">用户中心</li>
+        <li><a href="{:url('/user/index')}"><span class="icon color5"><i class="fa fa-shopping-cart"></i></span>我的订单</a></li>
+        <li><a href="{:url('/user/creat_print')}"><span class="icon color6"><i class="fa fa-print"></i></span>新建打印</a></li>
+    </ul>
+
+</div>
+<!-- END SIDEBAR -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+<!-- ================================================
+jQuery Library
+================================================ -->
+<script type="text/javascript" src="__STATIC__/js/jquery.min.js"></script>
+
+
+
+<!-- ================================================
+Bootstrap Core JavaScript File
+================================================ -->
+<script src="__STATIC__/js/bootstrap/bootstrap.min.js"></script>
+
+<!-- ================================================
+Plugin.js - Some Specific JS codes for Plugin Settings
+================================================ -->
+<script type="text/javascript" src="__STATIC__/js/plugins.js"></script>
+
+<!--弹框-->
+<script type="text/javascript" src="/static/layer/layer.js"></script>
+<link href="/static/resources/style.css" rel="stylesheet">
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTENT -->
+
+<div class="content">
+
+    {__CONTENT__}
+
+    <!-- Start Footer -->
+    <div class="row footer">
+        <div class="col-md-6 text-left">
+            Copyright © 2015 <a href="http://themeforest.net/user/egemem/portfolio" target="_blank">Egemem</a> All rights reserved.
+        </div>
+        <div class="col-md-6 text-right">
+            Design and Developed by <a href="http://themeforest.net/user/egemem/portfolio" target="_blank">Egemem</a>
+        </div>
+    </div>
+    <!-- End Footer -->
+
+
+</div>
+<!-- End Content -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+
+</body>
+</html>

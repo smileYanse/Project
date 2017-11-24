@@ -1,0 +1,166 @@
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">{$subtitle}</h1>
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<div class="container-default">
+    <div class="row" style="margin-bottom: 50px;">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-title">
+                    <h3>订单信息</h3>
+                </div>
+                <div class="panel-body">
+                    <h4>订单号：{$oRes.o_id}     状态： {$Think.config.order_state[$oRes.o_state]}</h4>
+                    <div class="col-md-12 color3-bg">
+                        <p>尊敬的客户，您的订单已经在处理中，请您耐心等待。</p>
+                        <p>请在下单后尽快支付订单，等待打印完毕到店领取,打印云将与卖家结算。如果您对购买的商品不满意，您可联系客服!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="stepInfo" style="height:70px;">
+                <ul style="display:block; margin-left: 0px">
+                    <li></li>
+                    <li></li>
+                </ul>
+                {foreach $Think.config.order_state_int as $k => $v}
+                <div class="stepIco stepIco{$v}" id="produce" {if condition="$Think.config.order_state_int[$oRes.o_state] >= $v"}style="background: rgb(221, 0, 0);"{/if}>{$v}
+                <div class="stepText" {if condition="$Think.config.order_state_int[$oRes.o_state] >= $v"}style="color: rgb(221, 0, 0);"{/if}>{$Think.config.order_state[$k]}</div>
+        </div>
+        {/foreach}
+
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-title">
+            <h3>订单跟踪</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <td>处理时间</td>
+                    <td>处理信息</td>
+                    <td>操作人</td>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="otRes" id="vo"}
+                <tr>
+                    <td>{$vo.ot_operate_time}</td>
+                    <td>{$vo.ot_operate_information}</td>
+                    <td>{$vo.ot_operator}</td>
+                </tr>
+                {/volist}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-title">
+            <h3>付款信息</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    付款方式：{$Think.config.pay_type[$oRes.o_pay_type]}
+                </div>
+                <div class="col-md-4">
+                    商家信息: {$oRes.b_name}
+                </div>
+                <div class="col-md-4">
+                    配送费:￥{$oRes.o_delivery_fee}
+                </div>
+                <div class="col-md-4">
+                    商品金额：￥{$oRes.o_goods_money}
+                </div>
+                <div class="col-md-4">
+                    应支付金额：￥{$oRes.o_pay_money}
+                </div>
+                <div class="col-md-4">
+                    配送地址: {if condition="$oRes.o_delivery_type == 'self'"}自取 {$oRes.b_address}{/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-title">
+            <h3>打印信息</h3>
+        </div>
+        <div class="panel-body">
+            {volist name="ogRes" id="vo"}
+            <h4>文件名称:{$vo.f_filename}</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <td>NO</td>
+                    <td>开始页码</td>
+                    <td>结束页码</td>
+                    <td>彩色/黑白</td>
+                    <td>双面/单面</td>
+                    <td>纸张大小</td>
+                    <td>打印份数</td>
+                    <td>特别要求</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>{$vo.og_start_page}</td>
+                    <td>{$vo.og_end_page}</td>
+                    <td>{$Think.config.color[$vo.og_color]}</td>
+                    <td>{$Think.config.sided[$vo.og_two_sided]}</td>
+                    <td>{$vo.og_page_size}</td>
+                    <td>{$vo.og_totals}</td>
+                    <td>{$vo.og_extra}</td>
+                </tr>
+                </tbody>
+
+            </table>
+            {/volist}
+        </div>
+    </div>
+</div>
+
+{if condition="$oRes.o_state=='paid'"}
+<div class="col-md-12">
+    <form  id="h-form" action="{:url('/biz/index/orderconfirm')}" method="post">
+        <input type="hidden" name="oid" value="{$oRes.o_id}">
+        <button id="btn-submit" class="btn btn-danger" type="button">信息确认</button>
+    </form>
+</div>
+{/if}
+{if condition="$oRes.o_state=='produce'"}
+<div class="col-md-12">
+    <form  id="h-form" action="{:url('/biz/index/orderprint')}" method="post">
+        <input type="hidden" name="oid" value="{$oRes.o_id}">
+        <button id="btn-submit" class="btn btn-danger" type="button">打印完成</button>
+    </form>
+</div>
+{/if}
+
+</div>
+
+</div>
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<script type="text/javascript">
+    $("#btn-submit").on("click", function(){
+        $("#h-form").submit();
+
+    });
+</script>

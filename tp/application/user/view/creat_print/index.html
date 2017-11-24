@@ -1,0 +1,104 @@
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">{$subtitle}</h1>
+
+    <div class="right">
+        <div class="btn-group" role="group" aria-label="...">
+            <a id="upload-box" href="#" class="btn btn-danger">
+                <i class="fa fa-refresh"></i>上传文件
+            </a>
+        </div>
+    </div>
+
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<div class="container-default">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-title">
+                    文档列表
+                </div>
+                <div class="panel-body">
+                    <p>平台完美支持 word、xls、ppt各版本和PDF文档打印</p>
+                    <form action="{:url('/user/creat_print/selectshop')}" method="post">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <td class="text-center"><i class="fa fa-trash"></i></td>
+                                <td>ID</td>
+                                <td>文档名称</td>
+                                <td>操作</td>
+                                <td>文档大小</td>
+                                <td>上传时间</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="list" id="vo"}
+                            <tr>
+                                <td class="text-center"><input class="input-print-file" name="file-id[]" type="checkbox" value="{$vo.f_id}"></td>
+                                <td># <b>{$vo.f_id}</b></td>
+                                <td>{$vo.f_filename}</td>
+                                <td>
+                                    <div class="file-action">
+                                        <a href="{:url('/user/creat_print/download', ['id' => $vo.f_id])}"><i class="fa fa-download"></i></a>
+                                        <a href="{:url('/user/creat_print/trash', ['id' => $vo.f_id])}"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                                <td>{$vo.f_filesize}</td>
+                                <td>{$vo.f_upload_time}</td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                        {$list->render()}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button id="btn-print" class="btn btn-danger" disabled="disabled">打印</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+<script type="text/javascript" src="__STATIC__/layer/layer.js"></script>
+
+<script type="text/javascript">
+    $("#upload-box").on("click", function () {
+        layer.open({
+            type: 2,
+            title: '上传文件',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['800px', '600px'],
+            offset: ['100px'],
+            content: '{:url("/user/creat_print/upload")}' //iframe的url
+        });
+    });
+
+    /**
+     * 选中事件
+     */
+    $(".input-print-file").on("click", function(){
+        if ($(".input-print-file:checked").length >= 1) {
+            $("#btn-print").attr("disabled", false);
+        } else {
+            $("#btn-print").attr("disabled", true);
+        }
+    });
+
+</script>
